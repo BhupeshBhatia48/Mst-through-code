@@ -1,0 +1,39 @@
+import heapq
+
+def printMST(parent, graph):
+    print("Edge \tWeight")
+    for i in range(1, len(graph)):
+        print(f"{parent[i]} - {i} \t{graph[i][parent[i]]}")
+
+def primMST(graph):
+    V = len(graph)
+    key = [float('inf')] * V
+    parent = [None] * V
+    key[0] = 0
+    parent[0] = -1
+
+    pq = [(0, 0)]  # (key, vertex)
+    inMST = [False] * V
+
+    while pq:
+        current_key, u = heapq.heappop(pq)
+        inMST[u] = True
+
+        for v in range(V):
+            if graph[u][v] and not inMST[v] and key[v] > graph[u][v]:
+                key[v] = graph[u][v]
+                parent[v] = u
+                heapq.heappush(pq, (key[v], v))
+
+    printMST(parent, graph)
+
+if __name__ == "__main__":
+    graph = [
+        [0, 2, 0, 6, 0],
+        [2, 0, 3, 8, 5],
+        [0, 3, 0, 0, 7],
+        [6, 8, 0, 0, 9],
+        [0, 5, 7, 9, 0]
+    ]
+
+    primMST(graph)
